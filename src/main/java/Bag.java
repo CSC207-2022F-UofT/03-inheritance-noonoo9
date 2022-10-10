@@ -33,7 +33,7 @@ public abstract class Bag {
         this.color = color;
         this.capacity = capacity;
         this.numberOfContents = 0;
-        this.contents = new String[numberOfContents];
+        this.contents = new String[capacity];
     }
 
 
@@ -78,25 +78,20 @@ public abstract class Bag {
      *       and false otherwise.
      */
 
-    public boolean addItem(String add_item) {
+    public boolean addItem(String item) {
         if (this.numberOfContents < this.capacity) {
-            // add item to bag
-            // - create a new array with a length one greater than the contents
-            String[] new_contents = new String[numberOfContents + 1];
-            // - add all the old contents of the bag into the new array
-            for (int i=0; i < numberOfContents; i++) {
-                new_contents[i] = this.contents[i];
+            if (this.numberOfContents == 0) {
+                this.contents = new String[]{item};
+            } else {
+                String[] new_contents = new String[this.numberOfContents + 1];
+                for (int i=0; i < this.numberOfContents; i++) {
+                    new_contents[i] = this.contents[i];
+                }
             }
-            // - add the new item at the end of the array (last spot)
-            new_contents[numberOfContents + 1] = add_item;
-            // set old contents to equal new contents
-            this.contents = new_contents;
-            // increase number of contents by one
             this.numberOfContents += 1;
             return true;
-        } else {
-            return false;
         }
+        return false;
     }
 
 
@@ -111,22 +106,21 @@ public abstract class Bag {
      * @return
      */
     public String popItem() {
-        // store last item
-        String last_item = this.contents[numberOfContents];
-        // create new array with one less of original content's length
-        String[] new_contents = new String[numberOfContents - 1];
-        // store old contents items in until before the last item
-        for (int i=0; i < numberOfContents - 2; i++) {
-            new_contents[i] = this.contents[i];
+        if (this.numberOfContents == 0) {
+            return null;
+        } else {
+            String[] new_contents = new String[this.numberOfContents - 1];
+            String last_item = this.contents[this.numberOfContents];
+            if (this.numberOfContents != 1) {
+                for (int i = 0; i < this.numberOfContents - 1; i++) {
+                    new_contents[i] = this.contents[i];
+                }
+            }
+            this.contents = new String[]{};
+            this.numberOfContents -= 1;
+            return last_item;
         }
-        // set new contents to equal old contents
-        this.contents = new_contents;
-        // reduce number of contents by one
-        this.numberOfContents -= 1;
-        // return last item
-        return last_item;
     }
-
 
     /**
      * Increase this bag's capacity by n.
